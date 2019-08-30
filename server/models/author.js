@@ -13,6 +13,7 @@ const BookSchema = new Schema({
     },
     publication_year: {
         type: Date,
+        max: new Date()-1
     }
 }, {timestamps: true});
 
@@ -28,35 +29,13 @@ const AuthorSchema = new Schema({
     },
     birthday: {
         type: Date,
+        max: new Date()-1
     },
     books: [BookSchema]
 }, {timestamps: true});
 
 // <--- Custom Validations --->
-// ** Book **
-// date validation
-BookSchema.pre('validate', next => {
-    if (!Date(this.publication_year) < new Date() ) {
-        next(new Error('Publication date must be before today!'));
-    } else {
-        next();
-    }
-});
-
 // uniqueness
-BookSchema.plugin(uniqueValidator, { message: 'Book already found!'})
-
-// ** Author **
-// date validation
-AuthorSchema.pre('validate', next => {
-    if (!Date(this.birthday) < new Date() ) {
-        next(new Error('Birthday must be before today!'));
-    } else {
-        next();
-    }
-});
-
-// unique
 AuthorSchema.plugin(uniqueValidator, { message: 'Author already found!'})
 
 // <--- Document Model --->

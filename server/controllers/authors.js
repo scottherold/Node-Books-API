@@ -8,7 +8,10 @@ module.exports = {
         // All
         Author.find()
             .then(authors => res.json(authors))
-            .catch(err => res.json(err.errors));
+            .catch(err => {
+                console.log(err); 
+                res.status(400).json(err)
+            });
     },
     show(req, res) {
         // display one Author by ._id
@@ -16,7 +19,10 @@ module.exports = {
             .then(author => {
                 res.json(author ? author : 'No such author exists...'); // return JSON Author object, unless Author doesn't exist, then return error
             })
-            .catch(err => res.json(err));
+            .catch(err => {
+                console.log(err); 
+                res.status(400).json(err)
+            });
     },
     create(req, res) {
         // create new Author
@@ -29,14 +35,20 @@ module.exports = {
     },
     update(req, res) {
         // update one Author by ._id
-        Author.findByIdAndUpdate(req.params.id, req.body, {new: true})
+        Author.findByIdAndUpdate(req.params.id, req.body, {runValidators: true})
             .then(author => res.json(author))
-            .catch(err => res.json(err));
+            .catch(err => {
+                console.log(err); 
+                res.status(400).json(err)
+            });
     },
     destroy(req, res) {
         // delete Author by ._id
         Author.findByIdAndRemove(req.params.id)
             .then(result => res.json(result))
-            .catch(err => res.json(err));
+            .catch(err => {
+                console.log(err); 
+                res.status(400).json(err)
+            });
     }
 }
